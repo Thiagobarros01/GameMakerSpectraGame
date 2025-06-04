@@ -5,7 +5,7 @@
 move_wrap(true, false, sprite_width);
 
 // If the player is dead, the windmill stops moving, so we set the hspeed back to 0
-if (obj_game_manager.chicken_dead)
+if (obj_game_manager.player_dead)
 {
 	hspeed = 0;
 }
