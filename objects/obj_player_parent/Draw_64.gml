@@ -1,0 +1,1 @@
+draw_rectangle(20,100,20+ 20,600+20,false)

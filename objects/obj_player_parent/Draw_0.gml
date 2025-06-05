@@ -1,4 +1,4 @@
-/// @description Rotating the chicken
+/// @description Rotating 
 
 // In this line of code, we're setting a value that ranges from -5 to 5 in 0.02 seconds
 // This creates the illusion that the chicken is rotating from left to right over time
@@ -14,6 +14,6 @@ if (!obj_game_manager.player_dead)
 }
 else
 {
-	// If the chicken is dead, we use the draw_self function that does what the Draw event was supposed to do
+	// If is dead, we use the draw_self function that does what the Draw event was supposed to do
 	draw_self();
 }

@@ -1,64 +1,67 @@
-/// @description Player movement
+/// @description Player movement with touch controls
+
+// --- CONTROLES POR TOQUE (adicionar no início do Step Event) ---
+var touch_x = device_mouse_x_to_gui(0);
+var touch_y = device_mouse_y_to_gui(0);
+var is_touching = device_mouse_check_button(0, mb_left);
+
+// Reset movimento horizontal (use sua variável existente)
+horizontal_speed = 0;
+
+// Se está tocando a tela
+if (is_touching) {
+    // Toque na direita (últimos 30% da tela) - mover direita
+    if (touch_x > display_get_gui_width() * 0.7) {
+        horizontal_speed = 2; // Valor exemplo - substitua pelo que você usa
+    }
+    // Toque na esquerda (primeiros 30% da tela) - mover esquerda
+    else if (touch_x < display_get_gui_width() * 0.3) {
+        horizontal_speed = -2; // Valor exemplo - substitua pelo que você usa
+    }
+    // Toque no topo (20% superior) - pular
+    if (touch_y < display_get_gui_height() * 0.2 && place_meeting(x, y+1, obj_solid)) {
+        vertical_speed = -6; // Valor exemplo - substitua pelo que você usa
+    }
+}
+
 
 /// Checks if there's collision with the obj_solid
 if (check_collision(obj_solid))
 {
-	/// If there's a collision, then the player runs its walking animation
-	image_speed = 1;
+    image_speed = 1;
 } 
 else
 {
-	/// If not, it stops the animation while the player is jumping
-	image_speed = 0;
-	//and resets the animation to the first frame
-	image_index = 0;
-	
-	//While there's no collision with the ground, we add the gravity for the player to fall
-	vertical_speed += grav;
+    image_speed = 0;
+    image_index = 0;
+    vertical_speed += grav;
 }
-
 
 ///Vertical collision
 if (!obj_game_manager.player_dead)
 {
-	// This checks for an object collision at the new position, where the instance is going to move
-	// We get the new position by adding vertical_speed to the instance's Y value
-	if (place_meeting(x,y+vertical_speed,obj_solid))
-	{
-		// While we're still not precisely colliding with the obj_solid, we add 1 to the Y-axis
-		while (!place_meeting(x,y+sign(vertical_speed),obj_solid))
-		{
-			// We're using the sign value here, so we can get the value 1 if it is a positive or a negative
-			// value, in this demo we're not making a collision with the head of the player, but this code
-			// can also cover these type of collision as well
-			y += sign(vertical_speed);
-		}
-		
-		// After checking all the collision, we set the vertical_speed back to 0
-		vertical_speed = 0;
-		
-		// Creates the instance of the smoke effect when player hits the ground
-		instance_create_depth(x,y,depth+1,obj_smoke_fall);
-	}
+    if (place_meeting(x,y+vertical_speed,obj_solid))
+    {
+        while (!place_meeting(x,y+sign(vertical_speed),obj_solid))
+        {
+            y += sign(vertical_speed);
+        }
+        
+        vertical_speed = 0;
+        instance_create_depth(x,y,depth+1,obj_smoke_fall);
+    }
 }
 
-/// We apply our vertical_speed to the object's Y value
 y += vertical_speed;
-
-/// We apply our horizontal_speed to the object's X value
 x += horizontal_speed;
-
-/// This code prevents the player from moving away from the screen
 x = clamp(x,10,room_width-10);
 
-//If the player is dead, we add the dead_degrees to the image_angle of the object
 if (obj_game_manager.player_dead)
 {
-	image_angle += dead_degrees;
+    image_angle += dead_degrees;
 }
 
-// If we set the smoke_cooldown is greater than zero, we decrease its value 
 if(smoke_cooldown > 0)
 {
-	smoke_cooldown--;
+    smoke_cooldown--;
 }
