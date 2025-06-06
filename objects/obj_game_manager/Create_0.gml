@@ -4,7 +4,8 @@
 time_current = 0;
 
 // This variable is used to check if the player is dead
-chicken_dead = false;
+//chicken_dead = false;
+player_dead = false;
 
 // Sets the variable is_paused to false
 is_paused = false;
